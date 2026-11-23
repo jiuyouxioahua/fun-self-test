@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>搞钱人格 + AI人格 + 颜值骨相自测</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#fdfcfa; --surface:#ffffff; --surface2:#fff1ec; --ink:#1c1917; --muted:#6b6560; --line:#e8e0d9;
+--accent:#e84a2f; --accent-ink:#ffffff; --accent-soft:#ffe8e0; --teal:#0f766e; --teal-soft:#e0f2f0;
+--amber:#b45309; --amber-soft:#fef3c7; --radius:20px; --shadow:0 10px 30px rgba(28,25,23,.08);
+}
+@media (prefers-color-scheme: dark){
+:root{ --bg:#161311; --surface:#221e1b; --surface2:#2c2521; --ink:#f5f0ea; --muted:#a8a09a; --line:#3a332e; --accent:#ff6b4a; --accent-soft:#3d231c; --teal:#2dd4bf; --teal-soft:#14332f; --amber-soft:#332a12; --shadow:0 10px 30px rgba(0,0,0,.35);}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;padding:20px 16px 48px}
+button,input{font:inherit}
+button{min-height:48px}
+.top{padding:28px 4px 8px;text-align:center}
+.top.kicker{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent);background:var(--accent-soft);padding:6px 12px;border-radius:999px}
+.top h1{font-family:"Noto Serif SC",serif;font-size:34px;line-height:1.2;margin:16px 0 10px;font-weight:900;letter-spacing:-.02em}
+.top h1 em{font-style:normal;color:var(--accent)}
+.top p{color:var(--muted);font-size:14px;margin:0 auto;max-width:440px}
+.stats{display:flex;gap:8px;justify-content:center;margin:18px 0 6px;flex-wrap:wrap}
+.stats span{font-size:13px;font-weight:700;background:var(--surface);border:1px solid var(--line);padding:8px 12px;border-radius:999px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 20px;margin-top:16px}
+.hidden{display:none!important}
+h2{font-size:20px;line-height:1.3;margin:0 0 8px}
+h3{font-size:16px;margin:20px 0 8px}
+.lead{color:var(--muted);font-size:14px;margin:0}
+.lock-icon{width:56px;height:56px;margin:0 auto 14px;background:var(--accent-soft);border-radius:16px;display:grid;place-items:center;font-size:28px}
+.center{text-align:center}
+.code-input{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);font-size:17px;text-align:center;letter-spacing:.06em;margin:16px 0 8px}
+.code-input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.err{color:#dc2626;font-size:13px;min-height:20px;text-align:center}
+@media(prefers-color-scheme:dark){.err{color:#fca5a5}}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 18px;border:none;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:800;cursor:pointer;margin-top:12px}
+.btn:active{transform:scale(.99)}
+.btn.secondary{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+.btn.teal{background:var(--teal);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+.steps{display:flex;gap:6px;margin-bottom:18px}
+.steps i{flex:1;height:6px;border-radius:99px;background:var(--line);display:block}
+.steps i.on{background:var(--accent)}
+.steps i.done{background:var(--teal)}
+.q-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:20px}
+.progress i{display:block;height:100%;background:var(--accent);transition:width.25s ease}
+.q-text{font-size:21px;font-weight:800;line-height:1.4;margin:0 0 16px}
+.opt{display:block;width:100%;text-align:left;padding:16px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);font-size:15px;cursor:pointer;margin:10px 0;line-height:1.5}
+.opt b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--surface);border:1px solid var(--line);margin-right:10px;font-size:13px;vertical-align:middle}
+.opt:active,.opt:hover{border-color:var(--accent);background:var(--accent-soft)}
+.backlink{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:10px 4px;min-height:44px}
+.finger{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:16px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);cursor:pointer;margin:10px 0}
+.finger.num{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-weight:900}
+.finger strong{display:block;font-size:15px}
+.finger small{color:var(--muted);font-size:13px;line-height:1.5;display:block;margin-top:2px}
+.finger.check{margin-left:auto;flex:0 0 auto;font-size:13px;font-weight:800;padding:6px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.finger.selected{border-color:var(--teal);background:var(--teal-soft)}
+.finger.selected.check{background:var(--teal);color:#fff;border-color:var(--teal)}
+.finger.selected.num{background:var(--teal);color:#fff;border-color:var(--teal)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.field label{font-size:13px;font-weight:700;display:block;margin-bottom:6px}
+.field label span{color:var(--muted);font-weight:400}
+.field input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font-size:16px}
+.field input:focus{outline:2px solid var(--teal);border-color:transparent}
+.howto{background:var(--surface2);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--muted);margin-top:16px;line-height:1.7}
+.result-hero{text-align:center;padding:8px 0 4px}
+.result-type{font-size:38px;font-weight:900;line-height:1.15;color:var(--accent);font-family:"Noto Serif SC",serif}
+.result-type.teal{color:var(--teal);font-size:34px}
+.result-name{font-size:15px;font-weight:800;margin-top:8px;color:var(--muted)}
+.result-one{color:var(--muted);font-size:14px;margin-top:6px;max-width:460px;margin-left:auto;margin-right:auto}
+.dim{margin:12px 0}
+.dim-head{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px;gap:8px}
+.dim-head span:last-child{color:var(--muted);font-weight:500;text-align:right}
+.dim-bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;display:flex}
+.dim-bar i{display:block;height:100%}
+.list{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+.list li{margin:4px 0}
+.list li::marker{color:var(--accent)}
+.tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.tag.t{background:var(--teal-soft);color:var(--teal)}
+.face-visual{display:flex;gap:16px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px}
+.face-visual svg{flex:0 0 84px}
+.face-visual p{margin:0;font-size:14px}
+.divider{border:none;border-top:1px solid var(--line);margin:22px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:20;white-space:nowrap;max-width:92vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px;line-height:1.7;padding:0 12px}
+.intro-list{display:grid;gap:10px;margin-top:16px}
+.intro-item{display:flex;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.intro-item.ic{font-size:22px;line-height:1}
+.intro-item strong{font-size:14px;display:block}
+.intro-item span{font-size:13px;color:var(--muted)}
+.meter-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:480px){.meter-row{grid-template-columns:1fr}}
+.meter{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px}
+.meter strong{font-size:28px;line-height:1}
+.meter p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.combo{background:var(--teal-soft);border-radius:14px;padding:16px;margin-top:12px}
+.combo p{margin:0;font-size:14px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<span class="kicker">✦ 趣味自测 · 网页版</span>
+<h1>你的搞钱体质？<br>你的 AI 替身<em>是什么人格</em>？</h1>
+<p>40 道原创题测搞钱人格 + AI 人格，再做骨相自测，结合脸型给你搞钱方式和搞钱穿搭。大约 5–8 分钟，选第一反应就好。</p>
+<div class="stats"><span>💰 搞钱人格 20 题</span><span>🤖 AI 人格 20 题</span><span>✋ 骨相自测 + 量 4 个数</span></div>
+</header>
+
+<!-- 口令锁 -->
+<section id="screen-lock" class="card">
+<div class="lock-icon" aria-hidden="true">🔒</div>
+<h2 class="center">输入口令解锁</h2>
+<p class="lead center">口令在购买后自动发货里，付款后系统私信会发给你。<br>没买的话，先联系卖家获取。</p>
+<input class="code-input" id="codeInput" type="text" placeholder="输入购买后收到的口令" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="口令">
+<div class="err" id="codeErr" role="alert"></div>
+<button class="btn" id="unlockBtn">解锁测试 →</button>
+<p class="note">一个口令只给一个买家用，别转发给别人。<br>输错 3 次会提示联系卖家确认口令。</p>
+</section>
+
+<!-- 开始页 -->
+<section id="screen-intro" class="card hidden">
+<h2>三个部分，一次测完</h2>
+<p class="lead">先测搞钱，再测 AI，最后测骨相，一起出结果页，截图就能保存。全程大约 5–8 分钟，答错了可以回上一题改。</p>
+<div class="intro-list">
+<div class="intro-item"><span class="ic">💰</span><div><strong>第一部分 · 搞钱人格 20 题</strong><span>看你是开源型还是守财型、快冲还是慢炖、野路子还是正规军，组合出你的搞钱体质，给适合你的搞钱方式。</span></div></div>
+<div class="intro-item"><span class="ic">🤖</span><div><strong>第二部分 · AI 人格 20 题</strong><span>测你会被 AI 替代还是能驾驭 AI：替代风险、驾驭指数、你的 AI 替身是什么人格，还有你最难被替代的那一手。</span></div></div>
+<div class="intro-item"><span class="ic">✋</span><div><strong>第三部分 · 颜值骨相自测</strong><span>3 个手指自测 + 软尺量 4 个数，判断 6 种脸型。骨相会和搞钱人格合在一起，给你发型、妆容和搞钱穿搭建议。</span></div></div>
+</div>
+<button class="btn" id="startBtn">开始测试 →</button>
+<p class="note">本测试为趣味自测，题目和结果均为原创，仅供娱乐参考，非专业测评，<br>不构成职业、投资或心理咨询建议。</p>
+</section>
+
+<!-- 答题 -->
+<section id="screen-quiz" class="card hidden">
+<div class="steps" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+<div class="q-meta"><span id="qNum">第 1 / 40 题</span><span id="qPart">第一部分 · 搞钱人格</span></div>
+<div class="progress"><i id="qBar" style="width:0%"></i></div>
+<p class="q-text" id="qText"></p>
+<button class="opt" id="optA"></button>
+<button class="opt" id="optB"></button>
+<button class="backlink" id="qBack">← 上一题</button>
+</section>
+
+<!-- 骨相 -->
+<section id="screen-face" class="card hidden">
+<div class="steps" aria-hidden="true"><i class="done"></i><i class="on"></i><i class="on"></i></div>
+<h2>第三部分：颜值骨相自测</h2>
+<p class="lead">先做手指自测，再量尺寸。做不到也没关系，骨相只是参考，发型妆容都能修饰。</p>
+
+<h3>① 3 个手指自测 · 通过的点一下</h3>
+<button class="finger" data-finger="0" aria-pressed="false"><span class="num">1</span><span><strong>鼻根高不高？</strong><small>食指竖放在鼻根（两眼之间），贴住额头和鼻尖。手指不挡眼睛、能正常眨眼 = 通过。</small></span><span class="check">未选</span></button>
+<button class="finger" data-finger="1" aria-pressed="false"><span class="num">2</span><span><strong>颧骨发育好不好？</strong><small>食指横放在眉骨和颧骨中间的凹陷处。手指能轻松放下、还能眨眼 = 通过。</small></span><span class="check">未选</span></button>
+<button class="finger" data-finger="2" aria-pressed="false"><span class="num">3</span><span><strong>鼻子立体度够不够？</strong><small>用手遮住一只眼睛，斜着看鼻尖。鼻尖明显挺出、高于鼻梁线 = 通过。</small></span><span class="check">未选</span></button>
+
+<h3>② 软尺量 4 个数 · 单位 cm</h3>
+<p class="lead" style="margin-bottom:10px">没有软尺可以用绳子比一下再量绳子。量不准差 0.5cm 以内不影响判断。</p>
+<div class="grid2">
+<div class="field"><label>额头宽度 <span>眉弓上方约 1cm 最宽处</span></label><input type="number" inputmode="decimal" id="wFore" placeholder="例如 14.0" min="5" max="30" step="0.1"></div>
+<div class="field"><label>颧骨宽度 <span>脸左右最突出的两点</span></label><input type="number" inputmode="decimal" id="wCheek" placeholder="例如 14.5" min="5" max="30" step="0.1"></div>
+<div class="field"><label>下颌宽度 <span>下颌角最宽处</span></label><input type="number" inputmode="decimal" id="wJaw" placeholder="例如 12.5" min="5" max="30" step="0.1"></div>
+<div class="field"><label>脸长 <span>发际线中央到下巴尖</span></label><input type="number" inputmode="decimal" id="wLen" placeholder="例如 19.0" min="10" max="35" step="0.1"></div>
+</div>
+<div class="err" id="faceErr" role="alert"></div>
+<button class="btn teal" id="resultBtn">查看我的完整结果 →</button>
+<button class="backlink" id="faceBack">← 回到最后一题</button>
+<div class="howto">💡 小提示：4 个数都填了才能判断脸型；只做手指自测也可以先看结果，脸型会显示“待测量”。</div>
+</section>
+
+<!-- 结果 -->
+<section id="screen-result" class="card hidden">
+<div class="steps" aria-hidden="true"><i class="done"></i><i class="done"></i><i class="done"></i></div>
+
+<div class="result-hero">
+<div style="font-size:13px;color:var(--muted);font-weight:700">你的搞钱人格是</div>
+<div class="result-type" id="rMoneyType">—</div>
+<div class="result-one" id="rMoneyOne"></div>
+<div class="tagrow" style="justify-content:center" id="rMoneyTags"></div>
+</div>
+
+<h3>搞钱三维度，你偏哪边？</h3>
+<div id="rMoneyDims"></div>
+<h3>你的搞钱优势</h3><ul class="list" id="rMoneyPros"></ul>
+<h3>最容易漏财 / 踩的坑</h3><ul class="list" id="rMoneyCons"></ul>
+<h3>适合你的搞钱方式</h3><ul class="list" id="rMoneyWays"></ul>
+
+<hr class="divider">
+
+<div class="result-hero">
+<div style="font-size:13px;color:var(--muted);font-weight:700">你的 AI 人格是</div>
+<div class="result-type teal" id="rAiType">—</div>
+<div class="result-one" id="rAiOne"></div>
+<div class="tagrow" style="justify-content:center" id="rAiTags"></div>
+</div>
+
+<div class="meter-row">
+<div class="meter"><div style="font-size:13px;font-weight:700;color:var(--muted)">被 AI 替代风险</div><strong id="rRisk" style="color:var(--accent)">—</strong><p id="rRiskText"></p></div>
+<div class="meter"><div style="font-size:13px;font-weight:700;color:var(--muted)">AI 驾驭指数</div><strong id="rDrive" style="color:var(--teal)">—</strong><p id="rDriveText"></p></div>
+</div>
+
+<h3>你的 AI 替身是什么人格？</h3>
+<p style="font-size:14px;color:var(--muted);margin:4px 0 0" id="rAiAvatar"></p>
+<h3>你最难被 AI 替代的那一手</h3>
+<p style="font-size:14px;color:var(--muted);margin:4px 0 0" id="rAiEdge"></p>
+<h3>这样用 AI，你最吃香</h3><ul class="list" id="rAiTips"></ul>
+
+<hr class="divider">
+<h3 style="margin-top:0">你的骨相结果</h3>
+<p style="font-size:14px;color:var(--muted);margin:0" id="rFinger"></p>
+<div class="face-visual">
+<svg width="84" height="104" viewBox="0 0 84 104" aria-hidden="true"><ellipse id="faceShape" cx="42" cy="52" rx="30" ry="44" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><circle cx="32" cy="46" r="3" fill="var(--ink)"/><circle cx="52" cy="46" r="3" fill="var(--ink)"/><path d="M42 50 L40 62 Q42 64 44 62" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/><path d="M32 76 Q42 82 52 76" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/></svg>
+<div><p><strong id="rFaceName" style="font-size:17px"></strong></p><p id="rFaceMeta" style="color:var(--muted);margin-top:4px"></p></div>
+</div>
+<div id="rFaceDetail"></div>
+
+<div class="combo">
+<div style="font-size:13px;font-weight:800;color:var(--teal);letter-spacing:.04em">骨相 × 搞钱人格 · 你的搞钱穿搭公式</div>
+<p id="rOutfit"></p>
+</div>
+
+<button class="btn" id="copyBtn">📋 复制结果文字</button>
+<button class="btn secondary" id="againBtn">再测一次</button>
+<p class="note">截图保存这一页，就是你的完整报告。<br>测脸型是为了扬长，不是论短；搞钱建议是思路，不是保证赚钱。</p>
+</section>
+
+<p class="footer">搞钱人格 + AI 人格 + 颜值骨相自测 · 题目与标签均为原创，仅供娱乐参考，非专业测评<br>结果不能替代职业规划、投资建议、心理咨询或医疗诊断，也不要当成给自己贴标签的依据。<br>发型妆容建议为一般性修饰思路，不涉及医美推荐。</p>
+</div>
+<div class="toast" id="toast">已复制</div>
+
+<script>
+var CODES = ["xiaohua99","xiaohua01","xiaohua02","xiaohua03","xiaohua04","xiaohua05","xiaohua06","xiaohua07","xiaohua08","xiaohua09","xiaohua10","xiaohua1","xiaohua2","xiaohua3","xiaohua4","xiaohua5","xiaohua6","xiaohua7","xiaohua8","xiaohua9"];
+var tries = 0, unlocked = false;
+function $(id){ return document.getElementById(id);}
+function show(id){
+["screen-lock","screen-intro","screen-quiz","screen-face","screen-result"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id);});
+window.scrollTo(0,0);
+}
+function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show");},1800);}
+function checkCode(){
+var v = ($("codeInput").value||"").trim().toLowerCase();
+if(CODES.indexOf(v)>-1){ unlocked=true; $("codeErr").textContent=""; show("screen-intro"); toast("解锁成功，开始测试吧");}
+else { tries++; $("codeErr").textContent = tries>=3? "口令不对，已试 "+tries+" 次，请联系卖家确认口令。": "口令不对，请重新输入（已试 "+tries+" 次）。";}
+}
+$("unlockBtn").addEventListener("click", checkCode);
+$("codeInput").addEventListener("keydown", function(e){ if(e.key==="Enter") checkCode();});
+
+/* 题目格式: [题干, A选项, B选项, A计分键, B计分键] 前20搞钱，后20 AI，全部原创 */
+var QS = [
+/* 搞钱 · 开源 EARN / 守财 SAVE */
+["手里突然多出 3000 块闲钱，你第一反应是？","先存起来，余额变厚最有安全感","想想能不能拿它撬动更大的收入，比如学个技能、试个小项目","SAVE","EARN"],
+["你更羡慕哪一种人？","工资不高，但存款很厚、心里不慌的人","收入路子多、不只靠一份工资的人","SAVE","EARN"],
+["看到同龄人靠副业多赚了一笔，你会？","先算算我现有的钱怎么守住、怎么稳稳变多","立刻去扒他做的是啥，我能不能也干","SAVE","EARN"],
+["你的花钱观更接近哪句？","钱要花在刀刃上，能省的绝不多花","该花的要舍得花，花出去是为了状态更好、赚得更多","SAVE","EARN"],
+["发工资那天，你最想先做的事是？","先把该存的转走，剩下的再随便花","看看最近有什么课、工具或机会值得投钱进去","SAVE","EARN"],
+["你对“月光”的态度更接近哪种？","绝不月光，没存款心里发慌","偶尔月光能接受，钱变成了体验和成长也不算亏","SAVE","EARN"],
+["有人安利一个要先交钱的搞钱训练营，你会？","先捂紧钱包，多半是割韭菜","先看内容和口碑，真值就果断交钱学","SAVE","EARN"],
+/* 搞钱 · 快冲 FAST / 慢炖 SLOW */
+["一个搞钱想法刚冒出来，你通常？","先干起来，边做边改","先在脑子里推演几遍，列个计划再动","FAST","SLOW"],
+["副业试了一个月还没赚到钱，你会？","快速换方向，别在一个坑里耗着","再坚持看看，先复盘问题到底出在哪","FAST","SLOW"],
+["朋友拉你一起做个小项目，明天就要给答复，你？","感觉对就上，机会不等人","先缓两天，我得把风险想清楚","FAST","SLOW"],
+["你做事的节奏更像？","短平快，一波一波往前冲","慢炖型，不求快，靠时间和积累","FAST","SLOW"],
+["购物车里放了件想买的东西，你会？","想要就下单，等降价太磨人","先放着，过几天还想要、或等到活动再买","FAST","SLOW"],
+["定存钱目标时，你更想要哪种？","三个月见效的目标，马上看到反馈才有劲","一年起步的大目标，慢慢来比较快","FAST","SLOW"],
+["有个能赚钱的小技能你还不太熟练，你会？","先接单再说，在实战里练","先系统练扎实了，再出去接活","FAST","SLOW"],
+/* 搞钱 · 野路子 WILD / 正规军 PRO */
+["搞钱的路子，你更信哪种？","信息差和冷门路子，往往最赚钱","正规稳定的路子，睡得着觉最重要","WILD","PRO"],
+["真要开始搞钱，你的第一步是？","自己先去各个平台扒野路子，小成本试水","先找个靠谱的人跟着学，或报个系统的课","WILD","PRO"],
+["碰到一个收益高、但不确定的机会，你？","小额先试，亏了就当交学费","先算最坏结果，亏不起就不碰","WILD","PRO"],
+["你更想打造哪种搞钱形象？","灵活会玩，总能找到别人没注意到的空子","专业靠谱，别人一有需求就第一个想到我","WILD","PRO"],
+["选副业时你更看重哪点？","没什么人做、竞争小，哪怕路子野一点","市场验证过、有人跑通的模式，照着做就行","WILD","PRO"],
+["有人分享一个“小众暴利”玩法，你的第一反应是？","先小成本验证一下再说","先查查合不合规、靠不靠谱，再决定碰不碰","WILD","PRO"],
+/* AI · 拥抱 OPEN / 观望 CAUTIOUS */
+["出了个新的 AI 工具，你通常？","第一时间去试，玩明白再说","先观望，等别人测评说靠谱了再说","OPEN","CAUTIOUS"],
+["看到 AI 写的东西越来越像人写的，你第一感觉是？","真香，能帮我省掉好多重复劳动","有点慌，我干的活它好像也会","OPEN","CAUTIOUS"],
+["工作里碰到重复又费时的活，你会？","先想想能不能让 AI 帮我干掉一部分","还是自己干放心，AI 给的我还得逐字检查","OPEN","CAUTIOUS"],
+["朋友说“以后不少活会被 AI 干掉”，你听完？","那我更要学会用它，站到用 AI 的那一边","更焦虑了，怕自己就是被干掉的那个","OPEN","CAUTIOUS"],
+["身边开始推行用 AI 提效，你会？","主动当第一批用的人，顺便把玩法摸清","等流程成熟、有人带了，再跟着用","OPEN","CAUTIOUS"],
+["AI 偶尔会一本正经地胡说八道，你怎么看？","知道它会犯错，重要信息我自己核对，但照样好用","这就是我不敢全信它的原因，能不用就不用","OPEN","CAUTIOUS"],
+["如果有个 AI 能帮你把周报、总结全写了，你会？","太好了，改改就能交，省下的时间干正事","还是想自己写，怕被看出来，也怕越写越生疏","OPEN","CAUTIOUS"],
+/* AI · 主导 LEAD / 跟随 FOLLOW */
+["用 AI 的时候，你更像哪种？","我拆任务、下指令、定标准，我是老板它打工","我提问，它给什么我基本用什么","LEAD","FOLLOW"],
+["AI 给的结果不满意，你会？","换问法、给它例子和标准，调到满意为止","算了，还不如我自己来","LEAD","FOLLOW"],
+["让你用 AI 做一份方案，你会？","我先定框架和观点，细节让它来补","让它先出个全稿，我再挑挑改改","LEAD","FOLLOW"],
+["你觉得人和 AI 最大的区别是？","判断力——知道什么好、什么对，比会生成更值钱","说不清，感觉它越来越像人了","LEAD","FOLLOW"],
+["让 AI 帮你想点子时，你通常？","我先给方向和限制条件，让它在这个框里发散","让它先随便想，想出什么我再挑","LEAD","FOLLOW"],
+["用一个 AI 工具用了一段时间，你会？","总结出一套自己的用法和模板，越用越顺手","每次都从头问，想起什么问什么","LEAD","FOLLOW"],
+["两个 AI 给了互相矛盾的答案，你会？","自己判断哪个更靠谱，我说了算","有点懵，不知道该信哪个","LEAD","FOLLOW"],
+/* AI · 不可替代力 CRE / EMP / CRA / JUD */
+["别人最常夸你哪一点？","有想法、有品味，点子总比别人多一截","会来事、懂人心，跟谁都能聊到一块去","CRE","EMP"],
+["哪种活你干起来最来劲？","动手做东西，把一个作品磨到自己满意","拿主意、做判断，越是乱局越想理清对错","CRA","JUD"],
+["碰到一个没人教过的新难题，你靠什么破局？","直觉和创意，先想个别人没想到的野办法","察言观色，先找到懂的人、把人搞定事就顺了","CRE","EMP"],
+["你最不想被机器学走的是哪部分？","我的判断和品味，知道什么是好的","我手上的手感和跟人之间的信任、人情味","JUD","CRA"],
+["团队里缺了你，最容易缺的是什么？","新鲜点子和让东西变好看的眼光","拍板的人——大家吵成一团时能定调的那个","CRE","JUD"],
+["哪种时刻你最有成就感？","把一件难搞的人和事顺下来，大家都舒服","亲手把一个东西从粗糙打磨到精致","EMP","CRA"]
+];
+
+var MONEY_TYPES = {
+"EARN-FAST-WILD":{name:"风口冲浪手",one:"嗅觉灵、胆子大、动作快，哪里有新机会你先冲上去试一把。",tags:["机会嗅觉强","行动快","敢试错"],pros:["对新平台、新玩法的敏感度远超普通人","执行力强，想法不过夜","小成本试错快，踩坑也爬得快"],cons:["容易追热点追到疲惫，什么都浅尝辄止","冲动投入，账算得太粗","热度一过就想换赛道，很难沉淀"],ways:["信息差型小生意：新平台早期红利、冷门品类搬运与测评","热点内容变现：抢首发测评、教程、避坑内容","小额多试：同时试 2–3 个小项目，用数据决定加码哪个"],style:"利落街头感 + 一件亮眼单品。搞钱场合要的是“我很新、我很快”的信号：干净利落的发型、合身不拖沓的上衣、一个有记忆点的配饰就够，别全身堆潮牌。"},
+"EARN-FAST-PRO":{name:"副业永动机",one:"白天有正事，晚上还有第二曲线，精力像装了两块电池。",tags:["精力旺盛","多线并行","靠谱交付"],pros:["时间利用率高，能同时推进好几件事","交付靠谱，口碑容易滚雪球","既敢冲又守规矩，客户敢长期合作"],cons:["容易把自己排满，休息永远排最后","接太多低价活，忙但不赚钱","不会拒绝，精力被不值得的事吃掉"],ways:["技能接单：把主业技能打包成标准化服务卖第二份","达人/商家合作类副业：靠靠谱交付吃复购和转介绍","把副业流程模板化：报价、交付、复盘都做成清单，省时间就是省钱"],style:"干练简约风。搞钱穿搭关键词是“靠谱、好合作”：合身衬衫或质感针织、利落裤装、干净的鞋。见客户不用穿得很贵，整洁和合身比 logo 更能帮你谈成单。"},
+"EARN-SLOW-WILD":{name:"斜杠探索家",one:"不爱走大路，总在冷门角落里挖自己的小金矿。",tags:["好奇心强","爱挖冷门","自学能力强"],pros:["愿意钻别人嫌麻烦的冷门领域","自学能力强，不等别人教","兴趣广，容易把爱好做成收入"],cons:["挖得太多，每个坑都只挖了一半","收入不稳定，时好时坏","不爱做重复的维护和交付，容易烂尾"],ways:["把一个冷门爱好做到能收费：教程、陪练、代做、社群","小众平台的早期内容和账号，有红利时先占位","数字小产品：模板、资料包、工具包这类做一次卖多次的东西"],style:"有点个性的混搭风。你的卖点是“有意思”，穿搭可以保留一个个人符号——特别的配饰、颜色或版型。谈合作时把个性收一点、专业露一点，信任感会翻倍。"},
+"EARN-SLOW-PRO":{name:"技能复利家",one:"不追快钱，靠一门手艺越磨越值钱，时间站在你这边。",tags:["长期主义","手艺过硬","越老越吃香"],pros:["愿意花时间把一件事做深做透","收入曲线前期慢、后期陡","不焦虑跟风，心态稳"],cons:["起步期容易自我怀疑，看别人赚快钱会动摇","不爱营销，手艺好但没人知道","对新工具接受慢，可能错过提效机会"],ways:["深耕一门可迁移技能，往“贵而难替代”的方向磨","做内容沉淀专业度：案例、教程、复盘，慢慢涨价","高客单、低频次的服务，比低价走量更适合你"],style:"质感基本款风。不追流行，赢在面料和版型：纯色、合身、少装饰。你的搞钱形象是“专家感”，发型保持干净稳定，别频繁大改，稳定本身就是你的招牌。"},
+"SAVE-FAST-WILD":{name:"精算捡漏王",one:"眼睛毒、手速快，优惠、差价、二手好货都逃不过你。",tags:["会算账","手速快","捡漏高手"],pros:["对价格极其敏感，从不多花冤枉钱","信息搜集能力强，好机会先人一步","脑子活，规则内的空子你最会钻"],cons:["容易为了省小钱花大时间","捡漏上瘾，买一堆“便宜但用不上”的东西","只盯着省，忘了开源的天花板更低"],ways:["把捡漏能力变成服务：帮人比价、代购、闲置好物甄选","二手/闲置的低买高卖，但只做你真懂的品类","优惠信息整理类内容或社群，靠信息差变现"],style:"清爽高性价比风。你最懂“看着贵、其实不贵”的搭配法：版型正的基本款 + 一件质感单品提气。搞钱出镜或见人时，干净清爽就是你的专业感。"},
+"SAVE-FAST-PRO":{name:"铁账本管家",one:"每一笔钱都有名有姓，账清、心稳、安全感拉满。",tags:["记账达人","条理清晰","风险意识强"],pros:["现金流管得明明白白，从不月光","执行力强，定的存钱计划真能完成","靠谱细致，天生适合管钱管流程"],cons:["容易对自己太抠，该投资自己的钱也舍不得花","过度求稳，可能错过让钱生钱的机会","替别人操心账，容易累着自己"],ways:["把你的记账/存钱方法做成模板、表格或内容分享出去","帮小商家、小团队做账目和流程梳理类的兼职","在守好本金的基础上，学一门能涨收入的技能——你的执行力不缺，缺的是放大器"],style:"整洁秩序感风。你的穿搭和你的账本一样：干净、成套、不出错。搞钱场合选同色系或低饱和搭配，发型一丝不乱，可信度直接拉满。"},
+"SAVE-SLOW-WILD":{name:"闷声攒钱家",one:"不声不响，余额却比谁都厚，快乐是看着数字慢慢涨。",tags:["低调","自律","闷声干大事"],pros:["消费欲低，天生存得住钱","不攀比，不被营销牵着走","耐心好，适合长线积累"],cons:["太低调，好机会和贵人都可能错过你","只存不投，钱会悄悄被通胀吃掉","社交投入太少，人脉也是资产，别省过头"],ways:["固定比例自动存钱 + 一份能慢慢涨的技能，双管齐下","把省钱生活方式做成内容：真实、低调的人设反而稀缺","小成本长线副业：不追爆款，选能积累口碑和复购的"],style:"低调有质感风。不靠 logo 靠版型，颜色选耐看的黑白灰和大地色。搞钱需要露脸时，记住：你的优势是“稳”，穿搭稳、发型稳，别人就愿意把长期的事交给你。"},
+"SAVE-SLOW-PRO":{name:"长期主义存钱家",one:"不赌不冲，一步一个脚印，目标是十年后感谢现在的自己。",tags:["极度自律","目标感强","稳扎稳打"],pros:["计划性最强，存钱目标几乎都能达成","情绪稳定，不被短期涨跌和热点带跑","信用好、口碑好，是长期合作的首选"],cons:["步子太稳，可能错过需要跳一下的机会","对自己要求高，偶尔花钱都有负罪感","变通性弱，计划外的变化容易让你焦虑"],ways:["主业求稳 + 一门技能副业求增量，这是最适合你的结构","把存钱计划产品化：目标拆解表、打卡表，分享给同类人","适合做需要长期信任的事：长期服务、会员制、复购型生意"],style:"经典耐看风。你的搞钱穿搭不用追潮流：一衣多穿、版型经典、配色克制。见重要的人时加一点精致细节——手表、干净的指甲、合身的剪裁，稳重就是你的气场。"}
+};
+
+var AI_TYPES = {
+"OPEN-LEAD":{name:"AI 指挥官",one:"你不会被 AI 替代，你会雇一堆 AI 给你打工。",tags:["会拆任务","会下指令","判断力在线"],avatar:"你的 AI 替身是「全能管家型」：你给框架和标准，它负责扩写、查漏、跑腿。你越会提要求，它越像一个不要工资的得力助手——但方向盘始终在你手里。",tips:["把重复活列成清单，一件件交给 AI，先解放时间","练“给标准”：好例子 + 明确要求，比换工具更管用","把省下的时间投到判断、审美和跟人打交道上，那是你涨价的部分"]},
+"OPEN-FOLLOW":{name:"AI 尝鲜玩家",one:"什么新工具你都玩过，但玩过不等于驾驭——差一步就升级。",tags:["好奇心强","上手快","容易满足于第一版答案"],avatar:"你的 AI 替身是「热点雷达型」：永远第一时间试新功能，点子多、素材多，但产出质量飘忽。给它配一个“质检流程”，它立刻从玩具变成生产力。",tips:["每次用 AI 多走一步：让它自查、给它打分标准、要求出第二版","把好用的问法存成自己的模板库，别每次从零开始","选 1–2 个工具深用，别被新工具牵着跑"]},
+"CAUTIOUS-LEAD":{name:"谨慎驯AI师",one:"你不盲信 AI，但一旦出手，你用得比谁都准。",tags:["不盲信","标准高","出手必精品"],avatar:"你的 AI 替身是「质检官型」：话不多、标准严，AI 交的每一稿都要过你这关。它生成八成，你把关两成——最后那两成，恰恰是最值钱的。",tips:["从你最烦的一件重复活开始试点，小步验证再扩大","把你的验收标准写下来，那就是你专属的“调教手册”","你的谨慎是优势，别让它变成拖延：先用起来，再挑毛病"]},
+"CAUTIOUS-FOLLOW":{name:"真人护城河型",one:"你对 AI 有点慌，但你的护城河可能根本不在屏幕里。",tags:["真人感强","靠经验和人情","需要迈出第一步"],avatar:"你的 AI 替身是「陪跑型」：它不抢你的活，它帮你处理杂事——整理、记录、起草，把你从琐事里捞出来，好让你去做只有真人能做的事：见面、判断、担责、暖人心。",tips:["先从零风险的事开始用：整理资料、列提纲、改错别字","记住：会被替代的是“流程”，不是“你这个人”，把你的经验和人脉盘一盘","每周只学一个小用法，一个月后你会发现没那么可怕"]}
+};
+
+var EDGES = {
+CRE:{name:"创意与审美",text:"你的护城河是创意和审美：AI 能生成一万个方案，但“哪个有意思、哪个好看、哪个能打动人”是你说了算。把品味练成标准，你就是给 AI 定方向的人。"},
+EMP:{name:"共情与人情",text:"你的护城河是懂人：察言观色、建立信任、把关系处舒服——这些要靠真人一张脸、一顿饭、一次及时出现。AI 再会说话，也替不了你到场。"},
+CRA:{name:"手艺与手感",text:"你的护城河是手上的功夫：做东西的手感、现场的应变、把成品磨到满意的耐心。AI 给的是图纸和参考，真正交付的那一下，还得靠你的手。"},
+JUD:{name:"判断与品味",text:"你的护城河是判断力：信息越多、生成越便宜，“知道什么对、什么好、什么该舍”就越贵。你要练的不是跟 AI 拼速度，而是当那个拍板的人。"}
+};
+
+var FACES = {
+"鹅蛋脸":{desc:"比例最均衡的脸型，额头、颧骨、下颌过渡柔和，下巴圆润。",hair:["几乎不挑发型，中分、偏分、直发卷发都能驾驭","想换风格可以试高颅顶卷发或低马尾，突出比例优势"],makeup:["妆容重点放在气色上，腮红横扫苹果肌就很好看","眉形选自然弯眉，不要画得太锋利"],avoid:["避免过度修容，会破坏原本的均衡感","避免厚重齐刘海遮住额头比例"]},
+"圆脸":{desc:"脸长和脸宽接近，线条圆润，下巴短而圆，显年轻、亲和力强。",hair:["高盘发、高马尾、露耳短发，视觉上拉长脸型","偏分长发、头顶蓬松，避免贴头皮"],makeup:["修容打在脸颊两侧和下颌，腮红斜向上扫","眉毛带一点眉峰，眼妆适当拉长眼尾"],avoid:["避免齐刘海 + 齐肩直发，会更显圆","避免横向腮红和过亮的高光打满全脸"]},
+"方脸":{desc:"下颌角明显，额头、颧骨、下颌宽度接近，轮廓有力量感、高级感。",hair:["八字刘海、S 型大卷，柔和下颌线条","偏分长发遮住一侧下颌角，层次感很重要"],makeup:["修容重点柔化下颌角，提亮额头中央和下巴","腮红打在苹果肌偏上位置，转移视觉重心"],avoid:["避免一刀切齐发尾和贴头皮黑长直","避免把头发全扎紧露出完整下颌线（除非想要气场造型）"]},
+"长脸":{desc:"脸长明显大于脸宽，中庭或下庭偏长，气质偏成熟、清冷。",hair:["空气刘海、法式刘海，缩短视觉脸长","两侧蓬松的卷发增加横向宽度，长度到锁骨附近最佳"],makeup:["腮红横向打在苹果肌上，增加横向感","眉毛画平一点、略粗，避免高挑眉拉长脸型"],avoid:["避免中分贴头皮长直发，会更显长","避免高颅顶过头和把头发全梳上去"]},
+"心形脸":{desc:"额头最宽，下巴尖，颧骨相对较窄，精致感强，有点像漫画脸。",hair:["偏分长卷发、锁骨发，平衡下半张脸的窄","下巴附近增加卷度和蓬松感，视觉上补宽度"],makeup:["下颌和下巴两侧可以轻扫提亮，增加饱满感","唇妆可以稍微丰满一点，平衡尖下巴"],avoid:["避免头顶过蓬、下面过贴的发型，会更显头重脚轻","避免过尖的眉尾和过锋利的眼线"]},
+"菱形脸":{desc:"颧骨最宽，额头和下颌较窄，骨骼感强，是超模脸的常见轮廓。",hair:["旁分长刘海、八字刘海，遮住颧骨最宽处","耳侧蓬松的卷发，增加额头和下颌的视觉宽度"],makeup:["颧骨下方轻扫深色修容，额头两侧和下颌提亮","腮红打在苹果肌上，不要打在颧骨最高点"],avoid:["避免中分贴脸直发，会突出颧骨宽度","避免把头发全扎光露出颧骨（日常造型）"]}
+};
+
+var idx=0, answers=[], scores={};
+function resetScores(){ scores={EARN:0,SAVE:0,FAST:0,SLOW:0,WILD:0,PRO:0,OPEN:0,CAUTIOUS:0,LEAD:0,FOLLOW:0,CRE:0,EMP:0,CRA:0,JUD:0};}
+resetScores();
+function recount(){ resetScores(); answers.forEach(function(a,i){ scores[QS[i][3+a]]++;});}
+function renderQ(){
+var q=QS[idx];
+$("qNum").textContent="第 "+(idx+1)+" / "+QS.length+" 题";
+$("qPart").textContent = idx<20? "第一部分 · 搞钱人格": "第二部分 · AI 人格";
+$("qBar").style.width=(idx/QS.length*100)+"%";
+$("qText").textContent=q[0];
+$("optA").innerHTML="<b>A</b>"+q[1];
+$("optB").innerHTML="<b>B</b>"+q[2];
+$("qBack").style.visibility = idx===0? "hidden": "visible";
+}
+function answer(v){
+answers[idx]=v; recount(); idx++;
+if(idx<QS.length) renderQ(); else { $("qBar").style.width="100%"; show("screen-face");}
+}
+$("optA").addEventListener("click", function(){ answer(0);});
+$("optB").addEventListener("click", function(){ answer(1);});
+$("qBack").addEventListener("click", function(){ if(idx>0){ idx--; renderQ();}});
+$("startBtn").addEventListener("click", function(){ idx=0; answers=[]; recount(); show("screen-quiz"); renderQ();});
+$("faceBack").addEventListener("click", function(){ idx=QS.length-1; show("screen-quiz"); renderQ();});
+
+var fingers=[false,false,false];
+document.querySelectorAll(".finger").forEach(function(btn){
+btn.addEventListener("click", function(){
+var i=+btn.getAttribute("data-finger");
+fingers[i]=!fingers[i];
+btn.classList.toggle("selected", fingers[i]);
+btn.setAttribute("aria-pressed", fingers[i]?"true":"false");
+btn.querySelector(".check").textContent = fingers[i]? "✓ 通过": "未选";
+});
+});
+
+function judgeFace(wFore,wCheek,wJaw,wLen){
+var ratio = wLen / wCheek;
+var maxW = Math.max(wFore,wCheek,wJaw);
+if(ratio>1.60) return {name:"长脸", ratio:ratio};
+if(ratio<1.18 && Math.abs(wFore-wJaw)/maxW<0.12) return {name:"圆脸", ratio:ratio};
+if(wJaw>=wCheek*0.92 && ratio<1.45) return {name:"方脸", ratio:ratio};
+if(wFore===maxW && wFore>wCheek*1.04) return {name:"心形脸", ratio:ratio};
+if(wCheek===maxW && wCheek>wFore*1.10 && wCheek>wJaw*1.10) return {name:"菱形脸", ratio:ratio};
+if(ratio>=1.38 && wCheek===maxW) return {name:"鹅蛋脸", ratio:ratio};
+if(ratio<1.25) return {name:"圆脸", ratio:ratio};
+return {name:"鹅蛋脸", ratio:ratio};
+}
+
+function dimHtml(labelA,valA,labelB,valB,color){
+var total=valA+valB||1; var pct=Math.round(valA/total*100);
+var win = valA>=valB? labelA: labelB;
+return '<div class="dim"><div class="dim-head"><span>更偏 · '+win+'</span><span>'+labelA+' '+pct+'% · '+labelB+' '+(100-pct)+'%</span></div><div class="dim-bar"><i style="width:'+pct+'%;background:'+color+'"></i><i style="flex:1;background:var(--line)"></i></div></div>';
+}
+function fillList(id,arr){ $(id).innerHTML=arr.map(function(x){ return "<li>"+x+"</li>";}).join("");}
+
+var lastResultText="";
+$("resultBtn").addEventListener("click", function(){
+recount();
+/* 搞钱人格 */
+var moneyKey=(scores.EARN>=scores.SAVE?"EARN":"SAVE")+"-"+(scores.FAST>=scores.SLOW?"FAST":"SLOW")+"-"+(scores.WILD>=scores.PRO?"WILD":"PRO");
+var money=MONEY_TYPES[moneyKey];
+$("rMoneyType").textContent=money.name;
+$("rMoneyOne").textContent=money.one;
+$("rMoneyTags").innerHTML=money.tags.map(function(t){ return '<span class="tag">'+t+'</span>';}).join("");
+$("rMoneyDims").innerHTML =
+dimHtml("开源",scores.EARN,"守财",scores.SAVE,"#e84a2f")+
+dimHtml("快冲",scores.FAST,"慢炖",scores.SLOW,"#b45309")+
+dimHtml("野路子",scores.WILD,"正规军",scores.PRO,"#0f766e");
+fillList("rMoneyPros",money.pros); fillList("rMoneyCons",money.cons); fillList("rMoneyWays",money.ways);
+
+/* AI 人格 */
+var aiKey=(scores.OPEN>=scores.CAUTIOUS?"OPEN":"CAUTIOUS")+"-"+(scores.LEAD>=scores.FOLLOW?"LEAD":"FOLLOW");
+var ai=AI_TYPES[aiKey];
+$("rAiType").textContent=ai.name;
+$("rAiOne").textContent=ai.one;
+$("rAiTags").innerHTML=ai.tags.map(function(t){ return '<span class="tag t">'+t+'</span>';}).join("");
+var risk=Math.max(12, Math.min(88, 88 - scores.OPEN*6 - scores.LEAD*6));
+var drive=100-risk;
+$("rRisk").textContent=risk+"%";
+$("rDrive").textContent=drive+"分";
+$("rRiskText").textContent = risk>=60? "风险偏高：不是你不行，是你还没把 AI 变成自己的工具，先从一件重复活练起。": risk>=35? "风险中等：你已经在用 AI 了，差的是把用法变成标准动作。": "风险较低：你已经站在用 AI 的那一边，接下来拼的是判断和审美。";
+$("rDriveText").textContent = drive>=65? "你已经会指挥 AI 干活了，继续练“定标准、做判断”。": drive>=40? "有驾驭的苗头，把好问法存成模板，你会进步很快。": "刚起步也没关系，先用零风险的小事练手，陪跑型替身一样能帮你省时间。";
+$("rAiAvatar").textContent=ai.avatar;
+var edgeKey="CRE", edgeMax=-1;
+["CRE","EMP","CRA","JUD"].forEach(function(k){ if(scores[k]>edgeMax){ edgeMax=scores[k]; edgeKey=k;}});
+var edge=EDGES[edgeKey];
+$("rAiEdge").textContent=""+edge.text;
+fillList("rAiTips",ai.tips);
+
+/* 骨相 */
+var passed=fingers.filter(Boolean).length;
+var fingerText = passed===3? "手指自测 3 / 3 全通过：鼻根、颧骨、鼻尖立体度都不错，骨相基础好。": passed===2? "手指自测通过 2 / 3：有明显优势项，没通过的那一项靠发型妆容修饰就好。": passed===1? "手指自测通过 1 / 3：骨相偏柔和路线，优势是亲和力，修饰空间也最大。": "手指自测 0 / 3：别焦虑，手指自测本来就粗糙，骨相只是参考，气质和妆容发型的影响大得多。";
+$("rFinger").textContent=fingerText;
+
+var wFore=parseFloat($("wFore").value), wCheek=parseFloat($("wCheek").value), wJaw=parseFloat($("wJaw").value), wLen=parseFloat($("wLen").value);
+var faceName="待测量", faceMeta="", detailHtml="";
+if(wFore&&wCheek&&wJaw&&wLen){
+var res=judgeFace(wFore,wCheek,wJaw,wLen); faceName=res.name;
+var f=FACES[faceName];
+faceMeta="脸长 / 颧骨宽 ≈ "+res.ratio.toFixed(2)+": 1 · 额 "+wFore+" / 颧 "+wCheek+" / 颌 "+wJaw+" / 长 "+wLen+" cm";
+detailHtml='<p style="font-size:14px;color:var(--muted)">'+f.desc+'</p>'
++'<h3>适合的发型</h3><ul class="list">'+f.hair.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul>'
++'<h3>适合的妆容</h3><ul class="list">'+f.makeup.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul>'
++'<h3>避雷</h3><ul class="list">'+f.avoid.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul>';
+var rx = faceName==="长脸"?24: faceName==="圆脸"?34: faceName==="方脸"?32: 30;
+var ry = faceName==="长脸"?48: faceName==="圆脸"?38: 44;
+var el=$("faceShape"); el.setAttribute("rx",rx); el.setAttribute("ry",ry);
+} else {
+faceMeta="还没填完 4 个尺寸，先看手指自测结果；补量后再测一次就能判断脸型。";
+detailHtml='<p style="font-size:14px;color:var(--muted)">6 种脸型速览：鹅蛋脸比例均衡、圆脸显年轻、方脸有高级感、长脸偏清冷、心形脸精致、菱形脸骨骼感强。没有哪种更好，只有哪种修饰思路不同。</p>';
+}
+$("rFaceName").textContent=faceName;
+$("rFaceMeta").textContent=faceMeta;
+$("rFaceDetail").innerHTML=detailHtml;
+
+/* 骨相 × 搞钱穿搭 */
+var faceHairTip = (faceName!=="待测量" && FACES[faceName])? FACES[faceName].hair[0]: "先选对发型：脸型测出来后，优先用适合你脸型的发型打底";
+var outfitText="你是×。发型先按骨相来："+faceHairTip+"。穿搭风格按搞钱人格来："+money.style;
+$("rOutfit").textContent=outfitText;
+
+lastResultText="搞钱人格："+money.name+" — "+money.one+"\n适合的搞钱方式："+money.ways.join("；")+"\nAI人格："+ai.name+" — "+ai.one+"\n被替代风险："+risk+"% · 驾驭指数："+drive+"分\nAI替身："+ai.avatar+"\n最难被替代："+edge.name+" — "+edge.text+"\n骨相：手指自测通过 "+passed+"/3，脸型："+faceName+(faceMeta?"（"+faceMeta+"）":"")+"\n搞钱穿搭："+outfitText+"\n仅供娱乐参考，非专业测评。";
+show("screen-result");
+});
+
+$("copyBtn").addEventListener("click", function(){
+function done(){ toast("结果已复制，去粘贴保存吧");}
+function fallback(){
+var ta=document.createElement("textarea"); ta.value=lastResultText; document.body.appendChild(ta); ta.select();
+try{ document.execCommand("copy"); done();}catch(e){ toast("复制失败，请截图保存");}
+document.body.removeChild(ta);
+}
+if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(lastResultText).then(done).catch(function(){ fallback();});} else fallback();
+});
+$("againBtn").addEventListener("click", function(){
+idx=0; answers=[]; recount(); fingers=[false,false,false];
+document.querySelectorAll(".finger").forEach(function(b){ b.classList.remove("selected"); b.setAttribute("aria-pressed","false"); b.querySelector(".check").textContent="未选";});
+["wFore","wCheek","wJaw","wLen"].forEach(function(id){ $(id).value="";});
+show("screen-intro");
+});
+</script>
+</body>
+</html>
