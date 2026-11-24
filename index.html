@@ -107,6 +107,30 @@ h3{font-size:16px;margin:20px 0 8px}
 .meter p{margin:6px 0 0;font-size:13px;color:var(--muted)}
 .combo{background:var(--teal-soft);border-radius:14px;padding:16px;margin-top:12px}
 .combo p{margin:0;font-size:14px;line-height:1.7}
+.scale-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.scale-opt{padding:14px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);font-size:14px;line-height:1.55}
+.scale-opt b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--line);margin-right:8px;font-size:13px;vertical-align:middle}
+.scale-opt.a{border-color:var(--accent)}
+.scale-opt.b{border-color:var(--teal)}
+.scale{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:16px 8px 4px}
+.scale button{border-radius:50%;border:2.5px solid var(--line);background:var(--surface);cursor:pointer;padding:0;flex:0 0 auto;min-height:0;transition:transform.12s ease,background.12s ease,border-color.12s ease}
+.scale button[data-v="-2"],.scale button[data-v="2"]{width:46px;height:46px}
+.scale button[data-v="-1"],.scale button[data-v="1"]{width:36px;height:36px}
+.scale button[data-v="0"]{width:28px;height:28px}
+.scale button[data-v="-2"],.scale button[data-v="-1"]{border-color:var(--accent)}
+.scale button[data-v="2"],.scale button[data-v="1"]{border-color:var(--teal)}
+.scale button.sel-a{background:var(--accent);border-color:var(--accent);transform:scale(1.12)}
+.scale button.sel-b{background:var(--teal);border-color:var(--teal);transform:scale(1.12)}
+.scale button.sel-0{background:var(--muted);border-color:var(--muted);transform:scale(1.12)}
+.scale-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:700;padding:2px 2px 0}
+.scale-pick{text-align:center;font-size:13px;color:var(--muted);min-height:22px;margin:10px 0 0;font-weight:700}
+.masked-code{font-size:40px;font-weight:900;letter-spacing:.14em;font-family:"Noto Serif SC",serif;text-align:center;margin:6px 0 2px}
+.rarity{text-align:center;margin-top:14px}
+.rarity strong{font-size:34px;color:var(--amber)}
+.trait-list{margin:10px 0 0;padding-left:18px;font-size:15px}
+.trait-list li{margin:6px 0}
+.trait-list li::marker{color:var(--accent)}
+.code-chip{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.12em;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;margin-top:8px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -114,30 +138,20 @@ h3{font-size:16px;margin:20px 0 8px}
 <header class="top">
 <span class="kicker">✦ 趣味自测 · 网页版</span>
 <h1>你的搞钱体质？<br>你的 AI 替身<em>是什么人格</em>？</h1>
-<p>40 道原创题测搞钱人格 + AI 人格，再做骨相自测，结合脸型给你搞钱方式和搞钱穿搭。大约 5–8 分钟，选第一反应就好。</p>
-<div class="stats"><span>💰 搞钱人格 20 题</span><span>🤖 AI 人格 20 题</span><span>✋ 骨相自测 + 量 4 个数</span></div>
+<p>60 道原创题测搞钱人格 + AI 人格，每题在 A / B 之间选倾向程度，再做骨相自测，结合脸型给你搞钱方式和搞钱穿搭。大约 8–12 分钟，选第一反应就好。</p>
+<div class="stats"><span>💰 搞钱人格 30 题</span><span>🤖 AI 人格 30 题</span><span>✋ 骨相自测 + 量 4 个数</span></div>
 </header>
 
-<!-- 口令锁 -->
-<section id="screen-lock" class="card">
-<div class="lock-icon" aria-hidden="true">🔒</div>
-<h2 class="center">输入口令解锁</h2>
-<p class="lead center">口令在购买后自动发货里，付款后系统私信会发给你。<br>没买的话，先联系卖家获取。</p>
-<input class="code-input" id="codeInput" type="text" placeholder="输入购买后收到的口令" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="口令">
-<div class="err" id="codeErr" role="alert"></div>
-<button class="btn" id="unlockBtn">解锁测试 →</button>
-<p class="note">一个口令只给一个买家用，别转发给别人。<br>输错 3 次会提示联系卖家确认口令。</p>
-</section>
-
 <!-- 开始页 -->
-<section id="screen-intro" class="card hidden">
+<section id="screen-intro" class="card">
 <h2>三个部分，一次测完</h2>
-<p class="lead">先测搞钱，再测 AI，最后测骨相，一起出结果页，截图就能保存。全程大约 5–8 分钟，答错了可以回上一题改。</p>
+<p class="lead">先测搞钱，再测 AI，最后测骨相。做完先免费看结果预览（人格代码打码 + 3 条特质 + 稀有度），输入购买口令再解锁完整报告。全程大约 8–12 分钟，答错了可以回上一题改。</p>
 <div class="intro-list">
-<div class="intro-item"><span class="ic">💰</span><div><strong>第一部分 · 搞钱人格 20 题</strong><span>看你是开源型还是守财型、快冲还是慢炖、野路子还是正规军，组合出你的搞钱体质，给适合你的搞钱方式。</span></div></div>
-<div class="intro-item"><span class="ic">🤖</span><div><strong>第二部分 · AI 人格 20 题</strong><span>测你会被 AI 替代还是能驾驭 AI：替代风险、驾驭指数、你的 AI 替身是什么人格，还有你最难被替代的那一手。</span></div></div>
+<div class="intro-item"><span class="ic">💰</span><div><strong>第一部分 · 搞钱人格 30 题</strong><span>看你是开源型还是守财型、快冲还是慢炖、野路子还是正规军，组合出你的搞钱体质，给适合你的搞钱方式。</span></div></div>
+<div class="intro-item"><span class="ic">🤖</span><div><strong>第二部分 · AI 人格 30 题</strong><span>测你会被 AI 替代还是能驾驭 AI：替代风险、驾驭指数、你的 AI 替身是什么人格，还有你最难被替代的那一手。</span></div></div>
 <div class="intro-item"><span class="ic">✋</span><div><strong>第三部分 · 颜值骨相自测</strong><span>3 个手指自测 + 软尺量 4 个数，判断 6 种脸型。骨相会和搞钱人格合在一起，给你发型、妆容和搞钱穿搭建议。</span></div></div>
 </div>
+<p class="lead" style="margin-top:14px">每道题不是非 A 即 B：在 5 个圆圈里选你的倾向程度——越靠 A 越像 A，越靠 B 越像 B，拿不准就选中间，结果会更细。</p>
 <button class="btn" id="startBtn">开始测试 →</button>
 <p class="note">本测试为趣味自测，题目和结果均为原创，仅供娱乐参考，非专业测评，<br>不构成职业、投资或心理咨询建议。</p>
 </section>
@@ -145,11 +159,22 @@ h3{font-size:16px;margin:20px 0 8px}
 <!-- 答题 -->
 <section id="screen-quiz" class="card hidden">
 <div class="steps" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
-<div class="q-meta"><span id="qNum">第 1 / 40 题</span><span id="qPart">第一部分 · 搞钱人格</span></div>
+<div class="q-meta"><span id="qNum">第 1 / 60 题</span><span id="qPart">第一部分 · 搞钱人格</span></div>
 <div class="progress"><i id="qBar" style="width:0%"></i></div>
 <p class="q-text" id="qText"></p>
-<button class="opt" id="optA"></button>
-<button class="opt" id="optB"></button>
+<div class="scale-opts">
+<div class="scale-opt a"><b>A</b><span id="optAText"></span></div>
+<div class="scale-opt b"><b>B</b><span id="optBText"></span></div>
+</div>
+<div class="scale" id="scaleRow" role="radiogroup" aria-label="倾向程度">
+<button type="button" data-v="-2" role="radio" aria-checked="false" aria-label="非常像 A"></button>
+<button type="button" data-v="-1" role="radio" aria-checked="false" aria-label="比较像 A"></button>
+<button type="button" data-v="0" role="radio" aria-checked="false" aria-label="中间，两边都像"></button>
+<button type="button" data-v="1" role="radio" aria-checked="false" aria-label="比较像 B"></button>
+<button type="button" data-v="2" role="radio" aria-checked="false" aria-label="非常像 B"></button>
+</div>
+<div class="scale-labels"><span>← 非常像 A</span><span>中间</span><span>非常像 B →</span></div>
+<p class="scale-pick" id="scalePick">点一个圆圈选你的倾向，越靠哪边越像哪边</p>
 <button class="backlink" id="qBack">← 上一题</button>
 </section>
 
@@ -173,9 +198,48 @@ h3{font-size:16px;margin:20px 0 8px}
 <div class="field"><label>脸长 <span>发际线中央到下巴尖</span></label><input type="number" inputmode="decimal" id="wLen" placeholder="例如 19.0" min="10" max="35" step="0.1"></div>
 </div>
 <div class="err" id="faceErr" role="alert"></div>
-<button class="btn teal" id="resultBtn">查看我的完整结果 →</button>
+<button class="btn teal" id="resultBtn">生成我的结果预览 →</button>
 <button class="backlink" id="faceBack">← 回到最后一题</button>
 <div class="howto">💡 小提示：4 个数都填了才能判断脸型；只做手指自测也可以先看结果，脸型会显示“待测量”。</div>
+</section>
+
+<!-- 免费预览 teaser -->
+<section id="screen-teaser" class="card hidden">
+<div class="steps" aria-hidden="true"><i class="done"></i><i class="done"></i><i class="done"></i></div>
+<h2 class="center">你的报告做好了 🎉</h2>
+<p class="lead center">这是免费预览：代码先打码，只露首尾。<br>输入购买口令，就能解锁完整报告。</p>
+
+<h3 class="center" style="margin-bottom:0">你的搞钱人格代码</h3>
+<div class="masked-code" id="tMoneyCode" style="color:var(--accent)">—</div>
+<h3 class="center" style="margin-bottom:0">你的 AI 人格代码</h3>
+<div class="masked-code" id="tAiCode" style="color:var(--teal)">—</div>
+
+<h3>先剧透你 3 条特质</h3>
+<ul class="trait-list" id="tTraits"></ul>
+
+<div class="rarity">
+<div style="font-size:13px;font-weight:700;color:var(--muted)">你的组合稀有度</div>
+<strong id="tRarity">—</strong>
+<p class="lead" style="margin-top:4px">按你答题倾向的鲜明程度估算的娱乐数值，越高代表这种组合越少见；不是真实人群统计。</p>
+</div>
+
+<hr class="divider">
+<h3 style="margin-top:0">完整报告里有什么</h3>
+<ul class="list">
+<li>搞钱人格全名 + 三维度占比 + 优势、漏财点、适合的搞钱方式</li>
+<li>AI 人格全名 + 被替代风险、驾驭指数、你的 AI 替身人格</li>
+<li>骨相脸型判定 + 发型、妆容、避雷建议</li>
+<li>骨相 × 搞钱人格的搞钱穿搭公式</li>
+</ul>
+
+<div class="lock-icon" aria-hidden="true" style="margin-top:20px">🔒</div>
+<h3 class="center" style="margin-top:0">输入口令解锁完整报告</h3>
+<p class="lead center">口令在购买后自动发货里，付款后系统私信会发给你。<br>没买的话，先联系卖家获取。</p>
+<input class="code-input" id="codeInput" type="text" placeholder="输入购买后收到的口令" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="口令">
+<div class="err" id="codeErr" role="alert"></div>
+<button class="btn" id="unlockBtn">解锁完整报告 →</button>
+<p class="note">一个口令只给一个买家用，别转发给别人。<br>输错 3 次会提示联系卖家确认口令。</p>
+<p class="note">本测试仅供娱乐参考，非专业测评。</p>
 </section>
 
 <!-- 结果 -->
@@ -185,6 +249,7 @@ h3{font-size:16px;margin:20px 0 8px}
 <div class="result-hero">
 <div style="font-size:13px;color:var(--muted);font-weight:700">你的搞钱人格是</div>
 <div class="result-type" id="rMoneyType">—</div>
+<div><span class="code-chip" id="rMoneyCode"></span></div>
 <div class="result-one" id="rMoneyOne"></div>
 <div class="tagrow" style="justify-content:center" id="rMoneyTags"></div>
 </div>
@@ -200,6 +265,7 @@ h3{font-size:16px;margin:20px 0 8px}
 <div class="result-hero">
 <div style="font-size:13px;color:var(--muted);font-weight:700">你的 AI 人格是</div>
 <div class="result-type teal" id="rAiType">—</div>
+<div><span class="code-chip" id="rAiCode"></span></div>
 <div class="result-one" id="rAiOne"></div>
 <div class="tagrow" style="justify-content:center" id="rAiTags"></div>
 </div>
@@ -239,69 +305,99 @@ h3{font-size:16px;margin:20px 0 8px}
 <div class="toast" id="toast">已复制</div>
 
 <script>
-var CODES = ["xiaohua99","xiaohua01","xiaohua02","xiaohua03","xiaohua04","xiaohua05","xiaohua06","xiaohua07","xiaohua08","xiaohua09","xiaohua10","xiaohua1","xiaohua2","xiaohua3","xiaohua4","xiaohua5","xiaohua6","xiaohua7","xiaohua8","xiaohua9"];
+/* 只存口令的 SHA-256 哈希，页面源码里不出现任何明文口令 */
+var CODE_HASHES = ["f0fe9cdf38421863e2e8539de71fa1aaba26a4d95dc370f9ca020100171bd72a","13625ed5355ed7020bc28006efbcb615fc9051d94373bb96b40261e796b25f48","ce0e4ac70284ce23c9741675f44ecfb8c561411754e0e0c3a69f22284c1a59fa","870781a6d23a79530c7ede1a2642663a781162ae41ad0bf268e5903c6979b93a","007eda9464a195c249fd756ad4ec291ae70e6fae591bdf406923b2b764800626","ce0975e1d16b71e32fe1cfe4b6bdb2b8f2e34eb892f7af2deb55c5516016a53e","6fdae4ae74cc5f8217c1b7da1f681f9e9257cd934e26f2fbde952bef0aa78c4b","1e3ab2f0d3ac389337c0d48f51330bdcac65dda28b88281523564c2ec8d676fa","66bfe4d016f0f2f8500f2afe13d0f3dcb7a0b79bf9a4c6aab3fa8de9753fb934","4bfb77a16571e4240a9d5189505b367bd1e86b73d6017042441397a5fc1c757b","91ae8abf5f041f557e7395264d6849648609147679fa2285d6d99cd1ff9ed716","8897b9379595a65dd906d25e2627f5a6068e037f8f283fe2197c90aaa4802fcb","095cf48e8bcb7f4be7ba1342573229b337e246ae8765af0f9ef6f7d04cf5e29b","bb87e7804a0e5576d7e081f338a4ad9112c592016c2e48f82bea1d3ab1c52f27","210d1e49fc1ebd23a537e515b78332a9785c10d622fa7f95ece09a0895bba97f","841165e555d5bed49eab59ef0d5410e1113c7f9e7555fd50af68eef7f271b004","4fb7a71b10445c8edc6aef2904a45b03825e322eeb5594cce9574973bd9c60a7","36987675d4eecee4e73d8a54f28ffbe95814d671c5dda5b5144375f85aef8c4e","959bc24a8f1297343b8253823ebcdc0458291511829b4e1fbc82be1744a5111e","61cf9c809362602198c8010e35148236f77ffbfc37d44022fa21e13c5dfec53c"];
 var tries = 0, unlocked = false;
 function $(id){ return document.getElementById(id);}
 function show(id){
-["screen-lock","screen-intro","screen-quiz","screen-face","screen-result"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id);});
+["screen-intro","screen-quiz","screen-face","screen-teaser","screen-result"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id);});
 window.scrollTo(0,0);
 }
 function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show");},1800);}
+function sha256Hex(str){
+if(!(window.crypto && crypto.subtle && crypto.subtle.digest)) return Promise.reject(new Error("no-subtle"));
+return crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)).then(function(buf){
+return Array.prototype.map.call(new Uint8Array(buf), function(b){ return ("0"+b.toString(16)).slice(-2);}).join("");
+});
+}
 function checkCode(){
 var v = ($("codeInput").value||"").trim().toLowerCase();
-if(CODES.indexOf(v)>-1){ unlocked=true; $("codeErr").textContent=""; show("screen-intro"); toast("解锁成功，开始测试吧");}
+if(!v){ $("codeErr").textContent="先输入口令再解锁。"; return;}
+sha256Hex(v).then(function(h){
+if(CODE_HASHES.indexOf(h)>-1){ unlocked=true; $("codeErr").textContent=""; show("screen-result"); toast("解锁成功，这是你的完整报告");}
 else { tries++; $("codeErr").textContent = tries>=3? "口令不对，已试 "+tries+" 次，请联系卖家确认口令。": "口令不对，请重新输入（已试 "+tries+" 次）。";}
+}).catch(function(){ $("codeErr").textContent="当前浏览器不支持口令校验，请换个浏览器打开再试。";});
 }
 $("unlockBtn").addEventListener("click", checkCode);
 $("codeInput").addEventListener("keydown", function(e){ if(e.key==="Enter") checkCode();});
 
 /* 题目格式: [题干, A选项, B选项, A计分键, B计分键] 前20搞钱，后20 AI，全部原创 */
 var QS = [
-/* 搞钱 · 开源 EARN / 守财 SAVE */
+/* 搞钱 · 开源 EARN / 守财 SAVE（10 题） */
 ["手里突然多出 3000 块闲钱，你第一反应是？","先存起来，余额变厚最有安全感","想想能不能拿它撬动更大的收入，比如学个技能、试个小项目","SAVE","EARN"],
 ["你更羡慕哪一种人？","工资不高，但存款很厚、心里不慌的人","收入路子多、不只靠一份工资的人","SAVE","EARN"],
+["你更想先达成哪个小目标？","存下第一笔应急金，心里有底","做出第一笔工资以外的收入","SAVE","EARN"],
 ["看到同龄人靠副业多赚了一笔，你会？","先算算我现有的钱怎么守住、怎么稳稳变多","立刻去扒他做的是啥，我能不能也干","SAVE","EARN"],
 ["你的花钱观更接近哪句？","钱要花在刀刃上，能省的绝不多花","该花的要舍得花，花出去是为了状态更好、赚得更多","SAVE","EARN"],
+["过年收到一笔红包或奖金，你会？","大部分存起来，只留一点犒劳自己","拿出一部分投到能生钱的地方试试","SAVE","EARN"],
 ["发工资那天，你最想先做的事是？","先把该存的转走，剩下的再随便花","看看最近有什么课、工具或机会值得投钱进去","SAVE","EARN"],
 ["你对“月光”的态度更接近哪种？","绝不月光，没存款心里发慌","偶尔月光能接受，钱变成了体验和成长也不算亏","SAVE","EARN"],
+["朋友喊你拼单囤一年的日用品，能省三成，你会？","囤！单价划算，省下来的就是赚到的","只买三个月量，现金留在手里更灵活","SAVE","EARN"],
 ["有人安利一个要先交钱的搞钱训练营，你会？","先捂紧钱包，多半是割韭菜","先看内容和口碑，真值就果断交钱学","SAVE","EARN"],
-/* 搞钱 · 快冲 FAST / 慢炖 SLOW */
+/* 搞钱 · 快冲 FAST / 慢炖 SLOW（10 题） */
 ["一个搞钱想法刚冒出来，你通常？","先干起来，边做边改","先在脑子里推演几遍，列个计划再动","FAST","SLOW"],
 ["副业试了一个月还没赚到钱，你会？","快速换方向，别在一个坑里耗着","再坚持看看，先复盘问题到底出在哪","FAST","SLOW"],
+["副业刚有点起色，有人劝你干脆全职干，你会？","冲一把，势头不等人","先兼职养着，跑稳定了再说","FAST","SLOW"],
 ["朋友拉你一起做个小项目，明天就要给答复，你？","感觉对就上，机会不等人","先缓两天，我得把风险想清楚","FAST","SLOW"],
 ["你做事的节奏更像？","短平快，一波一波往前冲","慢炖型，不求快，靠时间和积累","FAST","SLOW"],
+["限时秒杀和慢慢比价，你更常是哪种？","手快有手慢无，看准就下单","先加购物车晾几天，冷静了再说","FAST","SLOW"],
 ["购物车里放了件想买的东西，你会？","想要就下单，等降价太磨人","先放着，过几天还想要、或等到活动再买","FAST","SLOW"],
 ["定存钱目标时，你更想要哪种？","三个月见效的目标，马上看到反馈才有劲","一年起步的大目标，慢慢来比较快","FAST","SLOW"],
+["学一门能赚钱的新技能，你更喜欢哪种学法？","速成上手，先变现再慢慢补","系统学扎实，慢一点没关系","FAST","SLOW"],
 ["有个能赚钱的小技能你还不太熟练，你会？","先接单再说，在实战里练","先系统练扎实了，再出去接活","FAST","SLOW"],
-/* 搞钱 · 野路子 WILD / 正规军 PRO */
+/* 搞钱 · 野路子 WILD / 正规军 PRO（10 题） */
 ["搞钱的路子，你更信哪种？","信息差和冷门路子，往往最赚钱","正规稳定的路子，睡得着觉最重要","WILD","PRO"],
 ["真要开始搞钱，你的第一步是？","自己先去各个平台扒野路子，小成本试水","先找个靠谱的人跟着学，或报个系统的课","WILD","PRO"],
+["你更佩服哪种搞钱的人？","把小众冷门玩意儿做成网红店的","在大平台一路做到管理层的","WILD","PRO"],
 ["碰到一个收益高、但不确定的机会，你？","小额先试，亏了就当交学费","先算最坏结果，亏不起就不碰","WILD","PRO"],
 ["你更想打造哪种搞钱形象？","灵活会玩，总能找到别人没注意到的空子","专业靠谱，别人一有需求就第一个想到我","WILD","PRO"],
+["选搞钱项目时，你的第一标准是？","别人还没反应过来，我先占个坑","模式已经被验证过，照着复制就行","WILD","PRO"],
+["你的钱更想怎么安排？","留一部分随时能动，方便扑新机会","按计划分配好，每笔都有固定去处","WILD","PRO"],
 ["选副业时你更看重哪点？","没什么人做、竞争小，哪怕路子野一点","市场验证过、有人跑通的模式，照着做就行","WILD","PRO"],
+["听到一个新平台在招早期创作者，你会？","先注册占位，内容慢慢补","先看平台规则和结算靠不靠谱再说","WILD","PRO"],
 ["有人分享一个“小众暴利”玩法，你的第一反应是？","先小成本验证一下再说","先查查合不合规、靠不靠谱，再决定碰不碰","WILD","PRO"],
-/* AI · 拥抱 OPEN / 观望 CAUTIOUS */
+/* AI · 拥抱 OPEN / 观望 CAUTIOUS（10 题） */
 ["出了个新的 AI 工具，你通常？","第一时间去试，玩明白再说","先观望，等别人测评说靠谱了再说","OPEN","CAUTIOUS"],
 ["看到 AI 写的东西越来越像人写的，你第一感觉是？","真香，能帮我省掉好多重复劳动","有点慌，我干的活它好像也会","OPEN","CAUTIOUS"],
 ["工作里碰到重复又费时的活，你会？","先想想能不能让 AI 帮我干掉一部分","还是自己干放心，AI 给的我还得逐字检查","OPEN","CAUTIOUS"],
+["群里发了一个 AI 工具的教程链接，你会？","点开就跟着练，边看边用","先收藏，等真需要了再翻出来看","OPEN","CAUTIOUS"],
 ["朋友说“以后不少活会被 AI 干掉”，你听完？","那我更要学会用它，站到用 AI 的那一边","更焦虑了，怕自己就是被干掉的那个","OPEN","CAUTIOUS"],
 ["身边开始推行用 AI 提效，你会？","主动当第一批用的人，顺便把玩法摸清","等流程成熟、有人带了，再跟着用","OPEN","CAUTIOUS"],
+["AI 给的答案里混了一条假信息，你的反应是？","正常，工具嘛，关键信息我自己会复核","更不敢用了，怕哪天被它坑一把","OPEN","CAUTIOUS"],
 ["AI 偶尔会一本正经地胡说八道，你怎么看？","知道它会犯错，重要信息我自己核对，但照样好用","这就是我不敢全信它的原因，能不用就不用","OPEN","CAUTIOUS"],
 ["如果有个 AI 能帮你把周报、总结全写了，你会？","太好了，改改就能交，省下的时间干正事","还是想自己写，怕被看出来，也怕越写越生疏","OPEN","CAUTIOUS"],
-/* AI · 主导 LEAD / 跟随 FOLLOW */
+["如果 AI 能帮你回大部分日常消息，你会？","求之不得，我只处理重要的那几条","还是自己回，语气和分寸它拿不准","OPEN","CAUTIOUS"],
+/* AI · 主导 LEAD / 跟随 FOLLOW（10 题） */
 ["用 AI 的时候，你更像哪种？","我拆任务、下指令、定标准，我是老板它打工","我提问，它给什么我基本用什么","LEAD","FOLLOW"],
 ["AI 给的结果不满意，你会？","换问法、给它例子和标准，调到满意为止","算了，还不如我自己来","LEAD","FOLLOW"],
+["用 AI 写东西时，你更像？","导演型：我定调子和框架，它写初稿我来改","拿来型：它写什么，我顺着改改就行","LEAD","FOLLOW"],
 ["让你用 AI 做一份方案，你会？","我先定框架和观点，细节让它来补","让它先出个全稿，我再挑挑改改","LEAD","FOLLOW"],
 ["你觉得人和 AI 最大的区别是？","判断力——知道什么好、什么对，比会生成更值钱","说不清，感觉它越来越像人了","LEAD","FOLLOW"],
 ["让 AI 帮你想点子时，你通常？","我先给方向和限制条件，让它在这个框里发散","让它先随便想，想出什么我再挑","LEAD","FOLLOW"],
+["AI 推荐了一个你不认同的方案，你会？","让它按我的思路重来，并说清我为什么不认同","犹豫一下，也许它有它的道理","LEAD","FOLLOW"],
+["你会给 AI 立规矩吗，比如格式、字数、风格？","会，要求越细它干得越好","很少，基本想起什么问什么","LEAD","FOLLOW"],
 ["用一个 AI 工具用了一段时间，你会？","总结出一套自己的用法和模板，越用越顺手","每次都从头问，想起什么问什么","LEAD","FOLLOW"],
 ["两个 AI 给了互相矛盾的答案，你会？","自己判断哪个更靠谱，我说了算","有点懵，不知道该信哪个","LEAD","FOLLOW"],
-/* AI · 不可替代力 CRE / EMP / CRA / JUD */
+/* AI · 不可替代力 CRE / EMP / CRA / JUD（10 题，两两对决） */
 ["别人最常夸你哪一点？","有想法、有品味，点子总比别人多一截","会来事、懂人心，跟谁都能聊到一块去","CRE","EMP"],
 ["哪种活你干起来最来劲？","动手做东西，把一个作品磨到自己满意","拿主意、做判断，越是乱局越想理清对错","CRA","JUD"],
 ["碰到一个没人教过的新难题，你靠什么破局？","直觉和创意，先想个别人没想到的野办法","察言观色，先找到懂的人、把人搞定事就顺了","CRE","EMP"],
 ["你最不想被机器学走的是哪部分？","我的判断和品味，知道什么是好的","我手上的手感和跟人之间的信任、人情味","JUD","CRA"],
+["方案做到一半发现方向不对，你先做什么？","推翻重想，先找一个更有意思的解法","停下来复盘，先判断到底错在哪","CRE","JUD"],
 ["团队里缺了你，最容易缺的是什么？","新鲜点子和让东西变好看的眼光","拍板的人——大家吵成一团时能定调的那个","CRE","JUD"],
+["对方情绪上来了、场面有点僵，你的第一反应是？","先安抚人，事等会儿再说","先把东西改到对方满意为止","EMP","CRA"],
+["周末空出来，你更想拿它来？","琢磨个新点子，画草图、列脑洞","动手做个小东西，成品拿在手里最踏实","CRE","CRA"],
+["团队意见吵成一团时，你通常是那个？","打圆场、照顾每个人感受的人","拍板定方向、愿意担后果的人","EMP","JUD"],
 ["哪种时刻你最有成就感？","把一件难搞的人和事顺下来，大家都舒服","亲手把一个东西从粗糙打磨到精致","EMP","CRA"]
 ];
 
@@ -342,23 +438,40 @@ var FACES = {
 var idx=0, answers=[], scores={};
 function resetScores(){ scores={EARN:0,SAVE:0,FAST:0,SLOW:0,WILD:0,PRO:0,OPEN:0,CAUTIOUS:0,LEAD:0,FOLLOW:0,CRE:0,EMP:0,CRA:0,JUD:0};}
 resetScores();
-function recount(){ resetScores(); answers.forEach(function(a,i){ scores[QS[i][3+a]]++;});}
+/* answers 存 -2..2：负数偏 A（强度 2/1），0 中间，正数偏 B */
+function recount(){ resetScores(); answers.forEach(function(v,i){ if(v<0) scores[QS[i][3]]+= -v; else if(v>0) scores[QS[i][4]]+= v;});}
+var SCALE_LABELS={"-2":"非常像 A","-1":"比较像 A","0":"中间，两边都像","1":"比较像 B","2":"非常像 B"};
 function renderQ(){
 var q=QS[idx];
 $("qNum").textContent="第 "+(idx+1)+" / "+QS.length+" 题";
-$("qPart").textContent = idx<20? "第一部分 · 搞钱人格": "第二部分 · AI 人格";
+$("qPart").textContent = idx<30? "第一部分 · 搞钱人格": "第二部分 · AI 人格";
 $("qBar").style.width=(idx/QS.length*100)+"%";
 $("qText").textContent=q[0];
-$("optA").innerHTML="<b>A</b>"+q[1];
-$("optB").innerHTML="<b>B</b>"+q[2];
+$("optAText").textContent=q[1];
+$("optBText").textContent=q[2];
+var cur = answers[idx];
+document.querySelectorAll("#scaleRow button").forEach(function(b){
+var v=+b.getAttribute("data-v");
+var on = (cur===v);
+b.classList.toggle("sel-a", on&&v<0); b.classList.toggle("sel-b", on&&v>0); b.classList.toggle("sel-0", on&&v===0);
+b.setAttribute("aria-checked", on?"true":"false");
+});
+$("scalePick").textContent = (cur===undefined||cur===null)? "点一个圆圈选你的倾向，越靠哪边越像哪边": "已选："+SCALE_LABELS[cur];
 $("qBack").style.visibility = idx===0? "hidden": "visible";
 }
+var advancing=false;
 function answer(v){
-answers[idx]=v; recount(); idx++;
+if(advancing) return;
+answers[idx]=v; recount(); renderQ();
+advancing=true;
+setTimeout(function(){
+advancing=false; idx++;
 if(idx<QS.length) renderQ(); else { $("qBar").style.width="100%"; show("screen-face");}
+},240);
 }
-$("optA").addEventListener("click", function(){ answer(0);});
-$("optB").addEventListener("click", function(){ answer(1);});
+document.querySelectorAll("#scaleRow button").forEach(function(b){
+b.addEventListener("click", function(){ answer(+b.getAttribute("data-v"));});
+});
 $("qBack").addEventListener("click", function(){ if(idx>0){ idx--; renderQ();}});
 $("startBtn").addEventListener("click", function(){ idx=0; answers=[]; recount(); show("screen-quiz"); renderQ();});
 $("faceBack").addEventListener("click", function(){ idx=QS.length-1; show("screen-quiz"); renderQ();});
@@ -388,7 +501,7 @@ return {name:"鹅蛋脸", ratio:ratio};
 }
 
 function dimHtml(labelA,valA,labelB,valB,color){
-var total=valA+valB||1; var pct=Math.round(valA/total*100);
+var total=valA+valB; var pct= total? Math.round(valA/total*100): 50;
 var win = valA>=valB? labelA: labelB;
 return '<div class="dim"><div class="dim-head"><span>更偏 · '+win+'</span><span>'+labelA+' '+pct+'% · '+labelB+' '+(100-pct)+'%</span></div><div class="dim-bar"><i style="width:'+pct+'%;background:'+color+'"></i><i style="flex:1;background:var(--line)"></i></div></div>';
 }
@@ -400,6 +513,9 @@ recount();
 /* 搞钱人格 */
 var moneyKey=(scores.EARN>=scores.SAVE?"EARN":"SAVE")+"-"+(scores.FAST>=scores.SLOW?"FAST":"SLOW")+"-"+(scores.WILD>=scores.PRO?"WILD":"PRO");
 var money=MONEY_TYPES[moneyKey];
+var MLET={EARN:"E",SAVE:"S",FAST:"F",SLOW:"L",WILD:"W",PRO:"P"};
+var moneyCode=moneyKey.split("-").map(function(k){ return MLET[k];}).join("");
+$("rMoneyCode").textContent="人格代码 "+moneyCode;
 $("rMoneyType").textContent=money.name;
 $("rMoneyOne").textContent=money.one;
 $("rMoneyTags").innerHTML=money.tags.map(function(t){ return '<span class="tag">'+t+'</span>';}).join("");
@@ -415,7 +531,9 @@ var ai=AI_TYPES[aiKey];
 $("rAiType").textContent=ai.name;
 $("rAiOne").textContent=ai.one;
 $("rAiTags").innerHTML=ai.tags.map(function(t){ return '<span class="tag t">'+t+'</span>';}).join("");
-var risk=Math.max(12, Math.min(88, 88 - scores.OPEN*6 - scores.LEAD*6));
+var openT=scores.OPEN+scores.CAUTIOUS, leadT=scores.LEAD+scores.FOLLOW;
+var openN= openT? scores.OPEN/openT: 0.5, leadN= leadT? scores.LEAD/leadT: 0.5;
+var risk=Math.round(Math.max(10, Math.min(88, 86 - openN*44 - leadN*30)));
 var drive=100-risk;
 $("rRisk").textContent=risk+"%";
 $("rDrive").textContent=drive+"分";
@@ -425,6 +543,9 @@ $("rAiAvatar").textContent=ai.avatar;
 var edgeKey="CRE", edgeMax=-1;
 ["CRE","EMP","CRA","JUD"].forEach(function(k){ if(scores[k]>edgeMax){ edgeMax=scores[k]; edgeKey=k;}});
 var edge=EDGES[edgeKey];
+var ELET={CRE:"I",EMP:"E",CRA:"H",JUD:"J"};
+var aiCode=(scores.OPEN>=scores.CAUTIOUS?"O":"C")+(scores.LEAD>=scores.FOLLOW?"L":"F")+ELET[edgeKey];
+$("rAiCode").textContent="人格代码 "+aiCode;
 $("rAiEdge").textContent=""+edge.text;
 fillList("rAiTips",ai.tips);
 
@@ -459,8 +580,22 @@ var faceHairTip = (faceName!=="待测量" && FACES[faceName])? FACES[faceName].h
 var outfitText="你是×。发型先按骨相来："+faceHairTip+"。穿搭风格按搞钱人格来："+money.style;
 $("rOutfit").textContent=outfitText;
 
-lastResultText="搞钱人格："+money.name+" — "+money.one+"\n适合的搞钱方式："+money.ways.join("；")+"\nAI人格："+ai.name+" — "+ai.one+"\n被替代风险："+risk+"% · 驾驭指数："+drive+"分\nAI替身："+ai.avatar+"\n最难被替代："+edge.name+" — "+edge.text+"\n骨相：手指自测通过 "+passed+"/3，脸型："+faceName+(faceMeta?"（"+faceMeta+"）":"")+"\n搞钱穿搭："+outfitText+"\n仅供娱乐参考，非专业测评。";
-show("screen-result");
+lastResultText="搞钱人格："+money.name+"（代码 "+moneyCode+"）— "+money.one+"\n适合的搞钱方式："+money.ways.join("；")+"\nAI人格："+ai.name+"（代码 "+aiCode+"）— "+ai.one+"\n被替代风险："+risk+"% · 驾驭指数："+drive+"分\nAI替身："+ai.avatar+"\n最难被替代："+edge.name+" — "+edge.text+"\n骨相：手指自测通过 "+passed+"/3，脸型："+faceName+(faceMeta?"（"+faceMeta+"）":"")+"\n搞钱穿搭："+outfitText+"\n仅供娱乐参考，非专业测评。";
+
+/* 免费预览 teaser：代码打码只露首尾 + 3 条特质 + 稀有度 */
+function maskCode(c){ return c.length<=2? c: c.charAt(0)+"•"+c.charAt(c.length-1);}
+$("tMoneyCode").textContent=maskCode(moneyCode);
+$("tAiCode").textContent=maskCode(aiCode);
+var TRAITS={EARN:"搞钱欲望在线，不满足于只靠一份收入",SAVE:"钱袋子捂得紧，先守住再谈进攻",FAST:"行动派，机会来了先上车再调整",SLOW:"不抢跑，靠节奏和积累慢慢赢",WILD:"爱钻冷门，别人没注意到的空子你先看到",PRO:"走稳健路线，靠谱和长期主义是你的招牌",OPEN:"对新工具好奇心强，愿意先上手再说",CAUTIOUS:"对新东西先观察，不轻易把方向盘交出去"};
+var traitKeys=[scores.EARN>=scores.SAVE?"EARN":"SAVE", scores.WILD>=scores.PRO?"WILD":"PRO", scores.OPEN>=scores.CAUTIOUS?"OPEN":"CAUTIOUS"];
+$("tTraits").innerHTML=traitKeys.map(function(k){ return "<li>"+TRAITS[k]+"</li>";}).join("");
+var pairMargins=[["EARN","SAVE"],["FAST","SLOW"],["WILD","PRO"],["OPEN","CAUTIOUS"],["LEAD","FOLLOW"]].map(function(p){
+var t=scores[p[0]]+scores[p[1]]; return t? Math.abs(scores[p[0]]-scores[p[1]])/t: 0;
+});
+var avgMargin=pairMargins.reduce(function(a,b){return a+b;},0)/pairMargins.length;
+var rarity=Math.round(4+avgMargin*14);
+$("tRarity").textContent="约 "+rarity+"%";
+show(unlocked? "screen-result": "screen-teaser");
 });
 
 $("copyBtn").addEventListener("click", function(){
