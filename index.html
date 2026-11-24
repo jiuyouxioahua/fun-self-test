@@ -145,7 +145,7 @@ h3{font-size:16px;margin:20px 0 8px}
 <!-- 开始页 -->
 <section id="screen-intro" class="card">
 <h2>三个部分，一次测完</h2>
-<p class="lead">先测搞钱，再测 AI，最后测骨相。做完先免费看结果预览（人格代码打码 + 3 条特质 + 稀有度），输入购买口令再解锁完整报告。全程大约 8–12 分钟，答错了可以回上一题改。</p>
+<p class="lead">先测搞钱，再测 AI，最后测骨相。做完直接出完整报告。全程大约 8–12 分钟，答错了可以回上一题改。</p>
 <div class="intro-list">
 <div class="intro-item"><span class="ic">💰</span><div><strong>第一部分 · 搞钱人格 30 题</strong><span>看你是开源型还是守财型、快冲还是慢炖、野路子还是正规军，组合出你的搞钱体质，给适合你的搞钱方式。</span></div></div>
 <div class="intro-item"><span class="ic">🤖</span><div><strong>第二部分 · AI 人格 30 题</strong><span>测你会被 AI 替代还是能驾驭 AI：替代风险、驾驭指数、你的 AI 替身是什么人格，还有你最难被替代的那一手。</span></div></div>
@@ -198,48 +198,9 @@ h3{font-size:16px;margin:20px 0 8px}
 <div class="field"><label>脸长 <span>发际线中央到下巴尖</span></label><input type="number" inputmode="decimal" id="wLen" placeholder="例如 19.0" min="10" max="35" step="0.1"></div>
 </div>
 <div class="err" id="faceErr" role="alert"></div>
-<button class="btn teal" id="resultBtn">生成我的结果预览 →</button>
+<button class="btn teal" id="resultBtn">生成我的完整报告 →</button>
 <button class="backlink" id="faceBack">← 回到最后一题</button>
 <div class="howto">💡 小提示：4 个数都填了才能判断脸型；只做手指自测也可以先看结果，脸型会显示“待测量”。</div>
-</section>
-
-<!-- 免费预览 teaser -->
-<section id="screen-teaser" class="card hidden">
-<div class="steps" aria-hidden="true"><i class="done"></i><i class="done"></i><i class="done"></i></div>
-<h2 class="center">你的报告做好了 🎉</h2>
-<p class="lead center">这是免费预览：代码先打码，只露首尾。<br>输入购买口令，就能解锁完整报告。</p>
-
-<h3 class="center" style="margin-bottom:0">你的搞钱人格代码</h3>
-<div class="masked-code" id="tMoneyCode" style="color:var(--accent)">—</div>
-<h3 class="center" style="margin-bottom:0">你的 AI 人格代码</h3>
-<div class="masked-code" id="tAiCode" style="color:var(--teal)">—</div>
-
-<h3>先剧透你 3 条特质</h3>
-<ul class="trait-list" id="tTraits"></ul>
-
-<div class="rarity">
-<div style="font-size:13px;font-weight:700;color:var(--muted)">你的组合稀有度</div>
-<strong id="tRarity">—</strong>
-<p class="lead" style="margin-top:4px">按你答题倾向的鲜明程度估算的娱乐数值，越高代表这种组合越少见；不是真实人群统计。</p>
-</div>
-
-<hr class="divider">
-<h3 style="margin-top:0">完整报告里有什么</h3>
-<ul class="list">
-<li>搞钱人格全名 + 三维度占比 + 优势、漏财点、适合的搞钱方式</li>
-<li>AI 人格全名 + 被替代风险、驾驭指数、你的 AI 替身人格</li>
-<li>骨相脸型判定 + 发型、妆容、避雷建议</li>
-<li>骨相 × 搞钱人格的搞钱穿搭公式</li>
-</ul>
-
-<div class="lock-icon" aria-hidden="true" style="margin-top:20px">🔒</div>
-<h3 class="center" style="margin-top:0">输入口令解锁完整报告</h3>
-<p class="lead center">口令在购买后自动发货里，付款后系统私信会发给你。<br>没买的话，先联系卖家获取。</p>
-<input class="code-input" id="codeInput" type="text" placeholder="输入购买后收到的口令" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="口令">
-<div class="err" id="codeErr" role="alert"></div>
-<button class="btn" id="unlockBtn">解锁完整报告 →</button>
-<p class="note">一个口令只给一个买家用，别转发给别人。<br>输错 3 次会提示联系卖家确认口令。</p>
-<p class="note">本测试仅供娱乐参考，非专业测评。</p>
 </section>
 
 <!-- 结果 -->
@@ -305,31 +266,12 @@ h3{font-size:16px;margin:20px 0 8px}
 <div class="toast" id="toast">已复制</div>
 
 <script>
-/* 只存口令的 SHA-256 哈希，页面源码里不出现任何明文口令 */
-var CODE_HASHES = ["f0fe9cdf38421863e2e8539de71fa1aaba26a4d95dc370f9ca020100171bd72a","13625ed5355ed7020bc28006efbcb615fc9051d94373bb96b40261e796b25f48","ce0e4ac70284ce23c9741675f44ecfb8c561411754e0e0c3a69f22284c1a59fa","870781a6d23a79530c7ede1a2642663a781162ae41ad0bf268e5903c6979b93a","007eda9464a195c249fd756ad4ec291ae70e6fae591bdf406923b2b764800626","ce0975e1d16b71e32fe1cfe4b6bdb2b8f2e34eb892f7af2deb55c5516016a53e","6fdae4ae74cc5f8217c1b7da1f681f9e9257cd934e26f2fbde952bef0aa78c4b","1e3ab2f0d3ac389337c0d48f51330bdcac65dda28b88281523564c2ec8d676fa","66bfe4d016f0f2f8500f2afe13d0f3dcb7a0b79bf9a4c6aab3fa8de9753fb934","4bfb77a16571e4240a9d5189505b367bd1e86b73d6017042441397a5fc1c757b","91ae8abf5f041f557e7395264d6849648609147679fa2285d6d99cd1ff9ed716","8897b9379595a65dd906d25e2627f5a6068e037f8f283fe2197c90aaa4802fcb","095cf48e8bcb7f4be7ba1342573229b337e246ae8765af0f9ef6f7d04cf5e29b","bb87e7804a0e5576d7e081f338a4ad9112c592016c2e48f82bea1d3ab1c52f27","210d1e49fc1ebd23a537e515b78332a9785c10d622fa7f95ece09a0895bba97f","841165e555d5bed49eab59ef0d5410e1113c7f9e7555fd50af68eef7f271b004","4fb7a71b10445c8edc6aef2904a45b03825e322eeb5594cce9574973bd9c60a7","36987675d4eecee4e73d8a54f28ffbe95814d671c5dda5b5144375f85aef8c4e","959bc24a8f1297343b8253823ebcdc0458291511829b4e1fbc82be1744a5111e","61cf9c809362602198c8010e35148236f77ffbfc37d44022fa21e13c5dfec53c"];
-var tries = 0, unlocked = false;
 function $(id){ return document.getElementById(id);}
 function show(id){
-["screen-intro","screen-quiz","screen-face","screen-teaser","screen-result"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id);});
+["screen-intro","screen-quiz","screen-face","screen-result"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id);});
 window.scrollTo(0,0);
 }
 function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show");},1800);}
-function sha256Hex(str){
-if(!(window.crypto && crypto.subtle && crypto.subtle.digest)) return Promise.reject(new Error("no-subtle"));
-return crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)).then(function(buf){
-return Array.prototype.map.call(new Uint8Array(buf), function(b){ return ("0"+b.toString(16)).slice(-2);}).join("");
-});
-}
-function checkCode(){
-var v = ($("codeInput").value||"").trim().toLowerCase();
-if(!v){ $("codeErr").textContent="先输入口令再解锁。"; return;}
-sha256Hex(v).then(function(h){
-if(CODE_HASHES.indexOf(h)>-1){ unlocked=true; $("codeErr").textContent=""; show("screen-result"); toast("解锁成功，这是你的完整报告");}
-else { tries++; $("codeErr").textContent = tries>=3? "口令不对，已试 "+tries+" 次，请联系卖家确认口令。": "口令不对，请重新输入（已试 "+tries+" 次）。";}
-}).catch(function(){ $("codeErr").textContent="当前浏览器不支持口令校验，请换个浏览器打开再试。";});
-}
-$("unlockBtn").addEventListener("click", checkCode);
-$("codeInput").addEventListener("keydown", function(e){ if(e.key==="Enter") checkCode();});
 
 /* 题目格式: [题干, A选项, B选项, A计分键, B计分键] 前20搞钱，后20 AI，全部原创 */
 var QS = [
@@ -577,25 +519,12 @@ $("rFaceDetail").innerHTML=detailHtml;
 
 /* 骨相 × 搞钱穿搭 */
 var faceHairTip = (faceName!=="待测量" && FACES[faceName])? FACES[faceName].hair[0]: "先选对发型：脸型测出来后，优先用适合你脸型的发型打底";
-var outfitText="你是×。发型先按骨相来："+faceHairTip+"。穿搭风格按搞钱人格来："+money.style;
+var outfitText="你是「"+money.name+"」×「"+faceName+"」。发型先按骨相来："+faceHairTip+"。穿搭风格按搞钱人格来："+money.style;
 $("rOutfit").textContent=outfitText;
 
 lastResultText="搞钱人格："+money.name+"（代码 "+moneyCode+"）— "+money.one+"\n适合的搞钱方式："+money.ways.join("；")+"\nAI人格："+ai.name+"（代码 "+aiCode+"）— "+ai.one+"\n被替代风险："+risk+"% · 驾驭指数："+drive+"分\nAI替身："+ai.avatar+"\n最难被替代："+edge.name+" — "+edge.text+"\n骨相：手指自测通过 "+passed+"/3，脸型："+faceName+(faceMeta?"（"+faceMeta+"）":"")+"\n搞钱穿搭："+outfitText+"\n仅供娱乐参考，非专业测评。";
 
-/* 免费预览 teaser：代码打码只露首尾 + 3 条特质 + 稀有度 */
-function maskCode(c){ return c.length<=2? c: c.charAt(0)+"•"+c.charAt(c.length-1);}
-$("tMoneyCode").textContent=maskCode(moneyCode);
-$("tAiCode").textContent=maskCode(aiCode);
-var TRAITS={EARN:"搞钱欲望在线，不满足于只靠一份收入",SAVE:"钱袋子捂得紧，先守住再谈进攻",FAST:"行动派，机会来了先上车再调整",SLOW:"不抢跑，靠节奏和积累慢慢赢",WILD:"爱钻冷门，别人没注意到的空子你先看到",PRO:"走稳健路线，靠谱和长期主义是你的招牌",OPEN:"对新工具好奇心强，愿意先上手再说",CAUTIOUS:"对新东西先观察，不轻易把方向盘交出去"};
-var traitKeys=[scores.EARN>=scores.SAVE?"EARN":"SAVE", scores.WILD>=scores.PRO?"WILD":"PRO", scores.OPEN>=scores.CAUTIOUS?"OPEN":"CAUTIOUS"];
-$("tTraits").innerHTML=traitKeys.map(function(k){ return "<li>"+TRAITS[k]+"</li>";}).join("");
-var pairMargins=[["EARN","SAVE"],["FAST","SLOW"],["WILD","PRO"],["OPEN","CAUTIOUS"],["LEAD","FOLLOW"]].map(function(p){
-var t=scores[p[0]]+scores[p[1]]; return t? Math.abs(scores[p[0]]-scores[p[1]])/t: 0;
-});
-var avgMargin=pairMargins.reduce(function(a,b){return a+b;},0)/pairMargins.length;
-var rarity=Math.round(4+avgMargin*14);
-$("tRarity").textContent="约 "+rarity+"%";
-show(unlocked? "screen-result": "screen-teaser");
+show("screen-result");
 });
 
 $("copyBtn").addEventListener("click", function(){
